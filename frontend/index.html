@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Chaos API Controle</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Chaos API Control Panel</h1>
+        <p class="subtitle">Simule falhas controladas e testes de sistema.</p>
+    </header>
+
+    <div class="main-grid">
+        <div class="controls-section">
+            <!-- CPU Stress -->
+            <div class="control-block" data-chaos="cpu">
+                <div class="control-header">
+                    <span class="control-title">CPU Stress</span>
+                    <span class="status-badge status-inactive">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>Intensidade</label>
+                    <div class="range-container">
+                        <input type="range" min="0" max="100" value="50" id="cpu-intensity">
+                        <span class="range-value" id="cpu-value">50%</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <label>Duração (segundos)</label>
+                    <div class="range-container">
+                        <input type="range" min="10" max="300" value="60" id="cpu-duration">
+                        <span class="range-value" id="cpu-duration-value">60s</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="cpu-start">Iniciar</button>
+                    <button class="btn-stop" id="cpu-stop">Parar</button>
+                </div>
+            </div>
+
+            <!-- Memory Leak -->
+            <div class="control-block" data-chaos="memory">
+                <div class="control-header">
+                    <span class="control-title">Memory Leak</span>
+                    <span class="status-badge status-inactive">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>Limite (MB)</label>
+                    <div class="range-container">
+                        <input type="range" min="50" max="2000" value="500" step="50" id="mem-limit">
+                        <span class="range-value" id="mem-value">500 MB</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <label>Velocidade</label>
+                    <select id="mem-rate">
+                        <option value="slow">Lenta</option>
+                        <option value="medium" selected>Média</option>
+                        <option value="fast">Rápida</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="mem-start">Iniciar</button>
+                    <button class="btn-stop" id="mem-stop">Parar</button>
+                </div>
+            </div>
+
+            <!-- Latency -->
+            <div class="control-block" data-chaos="latency">
+                <div class="control-header">
+                    <span class="control-title">Latência Artificial</span>
+                    <span class="status-badge status-inactive">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>Delay (ms)</label>
+                    <div class="range-container">
+                        <input type="range" min="0" max="3000" value="500" step="50" id="latency-delay">
+                        <span class="range-value" id="latency-value">500 ms</span>
+                    </div>
+                </div>
+                <div class="control-row">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="latency-jitter" checked>
+                        <label for="latency-jitter">Adicionar jitter aleatório</label>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="latency-start">Iniciar</button>
+                    <button class="btn-stop" id="latency-stop">Parar</button>
+                </div>
+            </div>
+
+            <!-- HTTP Errors -->
+            <div class="control-block" data-chaos="errors">
+                <div class="control-header">
+                    <span class="control-title">Erros HTTP</span>
+                    <span class="status-badge status-inactive">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>Código de erro</label>
+                    <select id="error-code">
+                        <option value="500" selected>500 - Internal Server Error</option>
+                        <option value="502">502 - Bad Gateway</option>
+                        <option value="503">503 - Service Unavailable</option>
+                        <option value="504">504 - Gateway Timeout</option>
+                    </select>
+                </div>
+                <div class="control-row">
+                    <label>Probabilidade</label>
+                    <div class="range-container">
+                        <input type="range" min="0" max="100" value="30" id="error-probability">
+                        <span class="range-value" id="error-value">30%</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="errors-start">Iniciar</button>
+                    <button class="btn-stop" id="errors-stop">Parar</button>
+                </div>
+            </div>
+
+            <!-- I/O Stress -->
+            <div class="control-block" data-chaos="io">
+                <div class="control-header">
+                    <span class="control-title">I/O Stress</span>
+                    <span class="status-badge status-inactive">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>Intensidade</label>
+                    <select id="io-speed">
+                        <option value="low">Baixa</option>
+                        <option value="medium" selected>Média</option>
+                        <option value="high">Alta</option>
+                    </select>
+                </div>
+                <div class="control-row">
+                    <label>Operações por segundo</label>
+                    <div class="range-container">
+                        <input type="range" min="10" max="1000" value="100" step="10" id="io-ops">
+                        <span class="range-value" id="io-value">100</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="io-start">Iniciar</button>
+                    <button class="btn-stop" id="io-stop">Parar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <div class="status-panel">
+                <h3>Status Atual</h3>
+                <div class="status-item">
+                    <span class="status-label">CPU Stress</span>
+                    <span class="status-value" id="status-cpu">Inativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Memory Leak</span>
+                    <span class="status-value" id="status-memory">Inativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Latência</span>
+                    <span class="status-value" id="status-latency">Inativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Erros HTTP</span>
+                    <span class="status-value" id="status-errors">Inativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">I/O Stress</span>
+                    <span class="status-value" id="status-io">Inativo</span>
+                </div>
+            </div>
+
+            <button class="emergency-stop" id="stop-all">PARAR TUDO</button>
+
+            <div class="metrics-link">
+                <a href="/metrics" target="_blank">Ver Métricas Prometheus</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
