@@ -12,3 +12,5 @@ Agora basta monitorar no seu gestor de recursos a funcionalidade.
 
 por docker:
  docker run --rm -p 8000:8000 rickdevops/chaos-api:latest
+
+![front](image.png)
