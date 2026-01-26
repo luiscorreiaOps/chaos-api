@@ -7,3 +7,26 @@ chaos_latency_ms = Gauge("chaos_latency_ms", "Artificial latency in milliseconds
 chaos_http_errors_total = Counter("chaos_http_errors_total", "Total HTTP errors generated", ["code"])
 chaos_io_operations_total = Counter("chaos_io_operations_total", "Total I/O operations performed", ["type"])
 chaos_active_scenarios = Gauge("chaos_active_scenarios", "Number of active chaos scenarios")
+chaos_queue_messages_sent_total = Counter(
+    'chaos_queue_messages_sent_total',
+    'Total de mensagens enviadas para a fila'
+)
+chaos_queue_errors_total = Counter(
+    'chaos_queue_errors_total',
+    'Total de erros ao enviar mensagens'
+)
+
+chaos_queue_connection_status = Gauge(
+    'chaos_queue_connection_status',
+    'Status da conexão com BASH-MQ (1=ok, 0=erro)'
+)
+
+chaos_queue_messages_sent_current = Gauge(
+    'chaos_queue_messages_sent_current',
+    'Total de mensagens enviadas na sessão atual'
+)
+
+chaos_queue_send_rate = Gauge(
+    'chaos_queue_send_rate',
+    'Taxa atual de envio (mensagens por segundo)'
+)

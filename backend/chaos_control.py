@@ -9,6 +9,7 @@ _state: Dict[str, bool] = {
     "latency": False,
     "errors": False,
     "io": False,
+    "queue" : False,
 }
 
 def set_state(name: str, active: bool) -> None:

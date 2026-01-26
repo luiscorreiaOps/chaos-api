@@ -13,6 +13,7 @@ import chaos_memory
 import chaos_latency
 import chaos_errors
 import chaos_io
+import chaos_queue
 import chaos_control
 import metrics
 
@@ -32,6 +33,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 frontend_path = os.path.join(current_dir, "..", "frontend")
 frontend_path = os.path.abspath(frontend_path)
 
+# estaticos
 app.mount("/static", StaticFiles(directory=frontend_path), name="static")
 
 
@@ -58,6 +60,12 @@ class ErrorConfigRequest(BaseModel):
 class IORequest(BaseModel):
     speed: str
     ops_per_second: int
+
+
+class QueueRequest(BaseModel):
+    url: str
+    queue_name: str
+    messages_per_second: int
 
 
 @app.middleware("http")
@@ -142,6 +150,29 @@ async def stop_io():
     return {"status": "ok"}
 
 
+@app.post("/chaos/queue")
+async def start_queue(req: QueueRequest):
+    chaos_queue.start_queue_flood(req.url, req.queue_name, req.messages_per_second)
+    return {"status": "ok"}
+
+
+@app.post("/chaos/queue/stop")
+async def stop_queue():
+    chaos_queue.stop_queue_flood()
+    return {"status": "ok"}
+
+
+@app.get("/chaos/queue/stats")
+async def queue_stats():
+    return {
+        "connection_status": int(metrics.chaos_queue_connection_status._value.get()),
+        "messages_sent": int(metrics.chaos_queue_messages_sent_current._value.get()),
+        "send_rate": round(metrics.chaos_queue_send_rate._value.get(), 2),
+        "queue_url": chaos_queue.queue_config["url"],
+        "queue_name": chaos_queue.queue_config["queue_name"]
+    }
+
+
 @app.get("/chaos/status")
 async def status():
     return chaos_control.get_state()
@@ -154,6 +185,7 @@ async def stop_all():
     chaos_latency.set_latency(0, False)
     chaos_errors.set_error_config(500, 0.0)
     chaos_io.stop_io_stress()
+    chaos_queue.stop_queue_flood()
     chaos_control.stop_all()
     return {"status": "stopped"}
 

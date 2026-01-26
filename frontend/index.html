@@ -2,14 +2,14 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Chaos API Controle</title>
+    <title>Chaos API Control Panel</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="container">
     <header>
         <h1>Chaos API Control Panel</h1>
-        <p class="subtitle">Simule falhas controladas e testes de sistema.</p>
+        <p class="subtitle">Simule falhas controladas e teste a resiliência do seu sistema</p>
     </header>
 
     <div class="main-grid">
@@ -146,6 +146,46 @@
                     <button class="btn-stop" id="io-stop">Parar</button>
                 </div>
             </div>
+
+            <!-- Queue Flood -->
+            <div class="control-block" data-chaos="queue">
+                <div class="control-header">
+                    <span class="control-title">Queue Flood</span>
+                    <span class="status-badge status-inactive" id="queue-health-badge">Inativo</span>
+                </div>
+                <div class="control-row">
+                    <label>URL do BASH-MQ</label>
+                    <input type="text" id="queue-url" value="http://localhost:8080" placeholder="http://localhost:8080">
+                </div>
+                <div class="control-row">
+                    <label>Nome da fila</label>
+                    <input type="text" id="queue-name" value="chaos-test" placeholder="chaos-test">
+                </div>
+                <div class="control-row">
+                    <label>Mensagens por segundo</label>
+                    <div class="range-container">
+                        <input type="range" min="1" max="1000" value="100" step="10" id="queue-rate">
+                        <span class="range-value" id="queue-value">100</span>
+                    </div>
+                </div>
+                <div class="queue-metrics">
+                    <div class="metric-item">
+                        <span class="metric-label">Enviadas</span>
+                        <span class="metric-value" id="queue-sent">0</span>
+                    </div>
+                    <div class="metric-item">
+                        <span class="metric-label">Taxa</span>
+                        <span class="metric-value" id="queue-rate-value">0/s</span>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-start" id="queue-start">Iniciar</button>
+                    <button class="btn-stop" id="queue-stop">Parar</button>
+                </div>
+                <div class="queue-link">
+                    <a href="#" id="queue-stats-link" target="_blank">Ver fila no BASH-MQ</a>
+                </div>
+            </div>
         </div>
 
         <div class="sidebar">
@@ -170,6 +210,10 @@
                 <div class="status-item">
                     <span class="status-label">I/O Stress</span>
                     <span class="status-value" id="status-io">Inativo</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-label">Queue Flood</span>
+                    <span class="status-value" id="status-queue">Inativo</span>
                 </div>
             </div>
 
