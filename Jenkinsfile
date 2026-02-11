@@ -4,13 +4,21 @@ pipeline {
   stages {
     stage('Build Docker Image') {
       steps {
-        sh 'echo "Executando docker Build"'
+        script {
+          def dockerapp = docker.build("rickdevops/chaos-api:${env.BUILD_ID}", "-f Dockerfile .")
+          env.IMAGE_ID = dockerapp.id
+        }
       }
     }
 
     stage('Push') {
       steps {
-        sh 'echo "Executando docker Push"'
+        script {
+          docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+            docker.image(env.IMAGE_ID).push('latest')
+            docker.image(env.IMAGE_ID).push("${env.BUILD_ID}")
+          }
+        }
       }
     }
 
