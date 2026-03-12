@@ -15,7 +15,7 @@ jobs:
         continue-on-error: true
       - name: Snyk Scan
         if: ${{ env.SNYK_TOKEN != '' }}
-        uses: snyk/actions/python@v0.4.0
+        uses: snyk/actions/python@master
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
@@ -35,10 +35,8 @@ jobs:
       - name: Install and Test
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src:$(pwd)/backend
-          python setup.py build
-          python setup.py sdist
-          python setup.py bdist_wheel
-          pip install -e .
+          pip install pytest pytest-cov
+          pip install -r backend/requirements.txt
           python -m unittest discover -s backend -p 'test_*.py' || echo 'No tests found'
       - name: SonarCloud Scan
         if: ${{ env.SONAR_TOKEN != '' }}
