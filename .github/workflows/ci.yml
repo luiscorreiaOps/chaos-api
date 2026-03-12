@@ -30,8 +30,10 @@ jobs:
       - name: Install and Test
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src:$(pwd)/backend
+          python -m venv venv
+          pip install pytest pytest-cov
           pip install -r backend/requirements.txt
-          pytest
+          python -m pytest backend
       - name: SonarCloud
         if: env.SONAR_TOKEN != ''
         uses: sonarsource/sonarcloud-github-action@master
